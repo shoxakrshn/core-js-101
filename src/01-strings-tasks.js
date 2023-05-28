@@ -126,8 +126,8 @@ function repeatString(value, count) {
  *   'I like legends', 'end' => 'I like legs',
  *   'ABABAB','BA' => 'ABAB'
  */
-function removeFirstOccurrences() {
-  throw new Error('Not implemented');
+function removeFirstOccurrences(str, value) {
+  return str.replace(new RegExp(value), '');
 }
 
 /**
@@ -202,8 +202,35 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  const pseudograhic = (charStart, charMiddle, charEnd) => {
+    let line = '';
+    for (let i = 0; i < width; i += 1) {
+      switch (i) {
+        case 0:
+          line += charStart;
+          break;
+        case width - 1:
+          line += charEnd;
+          break;
+        default:
+          line += charMiddle;
+      }
+    }
+
+    return line;
+  };
+
+  const top = pseudograhic('┌', '─', '┐');
+  const middle = pseudograhic('│', ' ', '│');
+  const bottom = pseudograhic('└', '─', '┘');
+
+  let totalMiddle = '';
+
+  for (let i = 0; i < height - 2; i += 1) {
+    totalMiddle += `${middle}\n`;
+  }
+  return `${top}\n${totalMiddle}${bottom}\n`;
 }
 
 
@@ -223,8 +250,19 @@ function getRectangleString(/* width, height */) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  const rot13 = 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm';
+
+  let result = '';
+
+  for (let i = 0; i < str.length; i += 1) {
+    const current = str[i];
+    const initialIndex = alphabet.indexOf(current);
+    result += initialIndex !== -1 ? rot13[initialIndex] : str[i];
+  }
+
+  return result;
 }
 
 /**
