@@ -412,7 +412,6 @@ function toNaryString(num, n) {
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
 function getCommonDirectoryPath(pathes) {
-  //  throw new Error('Not implemented');
   let result = '';
   let strReg = '';
   const endOfPathIndex = pathes[0].lastIndexOf('/');
