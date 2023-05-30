@@ -63,22 +63,21 @@ function getPowerFunction(exponent) {
  *   getPolynom()      => null
  */
 function getPolynom(...args) {
-  if (args.length === 3) {
-    const [first, second, third] = args;
-    return (x) => first * x ** 2 + second * x + third;
-  }
+  const [first, second, third] = args;
 
-  if (args.length === 2) {
-    const [first, second] = args;
-    return (x) => first * x + second;
-  }
+  switch (args.length) {
+    case 3:
+      return (x) => first * x ** 2 + second * x + third;
 
-  if (args.length === 1) {
-    const [first] = args;
-    return () => first;
-  }
+    case 2:
+      return (x) => first * x + second;
 
-  return null;
+    case 1:
+      return () => first;
+
+    default:
+      return null;
+  }
 }
 
 
