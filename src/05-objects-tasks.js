@@ -115,33 +115,71 @@ function fromJSON(proto, json) {
  */
 
 const cssSelectorBuilder = {
-  element(/* value */) {
-    throw new Error('Not implemented');
+  result: '',
+  order: [],
+
+  element(value) {
+    return this.createElem(0, value);
   },
 
-  id(/* value */) {
-    throw new Error('Not implemented');
+  id(value) {
+    return this.createElem(1, `#${value}`);
   },
 
-  class(/* value */) {
-    throw new Error('Not implemented');
+  class(value) {
+    return this.createElem(2, `.${value}`);
   },
 
-  attr(/* value */) {
-    throw new Error('Not implemented');
+  attr(value) {
+    return this.createElem(3, `[${value}]`);
   },
 
-  pseudoClass(/* value */) {
-    throw new Error('Not implemented');
+  pseudoClass(value) {
+    return this.createElem(4, `:${value}`);
   },
 
-  pseudoElement(/* value */) {
-    throw new Error('Not implemented');
+  pseudoElement(value) {
+    return this.createElem(5, `::${value}`);
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  combine(selector1, combinator, selector2) {
+    return Object.assign(
+      Object.create(this),
+      { result: `${selector1.result} ${combinator} ${selector2.result}` },
+    );
   },
+
+  stringify() {
+    return this.result;
+  },
+
+  createElem(place, val) {
+    const obj = Object.create(this);
+    obj.order = [...this.order, place];
+    this.isOrder(obj.order);
+    this.isUniq(obj.order);
+    obj.result = this.result + val;
+    return obj;
+  },
+
+  isUniq(order) {
+    if (order
+      .filter((item) => (item < 2) || (item > 4))
+      .findIndex((item, index, arr) => arr.indexOf(item) !== index) >= 0) {
+      throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
+    }
+  },
+
+  isOrder(order) {
+    if (!(Array(order.length)
+      .fill()
+      .map((_, index) => order[index])
+      .sort((a, b) => a - b)
+      .every((item, index) => item === order[index]))) {
+      throw new Error('Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element');
+    }
+  },
+
 };
 
 
